@@ -4,6 +4,7 @@ import os
 from PIL import Image
 import re
 
+
 def plot_hypercube_subplots(hypercube, path="./", name="competence", episode_number=0, vmin=0, vmax=1):
     dims = hypercube.shape
     n_dims = len(dims)
@@ -56,5 +57,11 @@ def create_gif_from_images(image_folder, output_gif, duration=500):
 
 def plot_trajectory(time_index, values, path, name):
     plt.plot(time_index, values)
+    plt.savefig(f"{path}/{name}.png")
+    plt.close()
+
+
+def plot_mean_and_all_traj(time_index, mean, all, path, name):
+    plt.plot(time_index, mean)
     plt.savefig(f"{path}/{name}.png")
     plt.close()

@@ -1,39 +1,33 @@
-from teachers.random import RandomTeacher
-from students.student import BaseStudent
+from students.school import School
 import numpy as np
-import pathlib
-from utils.plot import create_gif_from_images
+import json
+from progress.bar import Bar
+import shutil
 
 seed = 0
 np.random.seed(seed)
 
 if __name__ == '__main__':
     # Some config:
-    nb_episodes = 5000
-    activity_space_desc = (10, 10)
-    expe_name = "base_test"
-    path = f"./outputs/{expe_name}"
-    subfolders = ["competence", "history", "trajectories"]
-    for subfolder in subfolders:
-        pathlib.Path(f"{path}/{subfolder}/").mkdir(parents=True, exist_ok=True)
+    base_dir = './config'
+    expe_file_name = 'expe_config'
+    config_expe = json.load(open(f'{base_dir}/{expe_file_name}.json', 'r'))
+    school = School(**config_expe)
+    # Save the config of the current run:
+    shutil.copy(f'{base_dir}/{expe_file_name}.json', f'./outputs/{config_expe["expe_name"]}/{expe_file_name}.json')
+    shutil.copy(f'{base_dir}/{config_expe["student_params_path"].split("/")[-1]}', f'./outputs/{config_expe["expe_name"]}/{config_expe["student_params_path"].split("/")[-1]}')
+    shutil.copy(f'{base_dir}/{config_expe["teachers_params_path"].split("/")[-1]}', f'./outputs/{config_expe["expe_name"]}/{config_expe["teachers_params_path"].split("/")[-1]}')
 
-    # Create object:
-    student = BaseStudent(activity_space_desc=activity_space_desc,
-                          nb_to_neighbour_mastery=3,
-                          initial_competence_proportion=0.2,
-                          unfeasible_space_proportion=0)
-    teacher = RandomTeacher(activity_space_desc)
+    with Bar('Processing...') as bar:
+        # Train loop:
+        for activity_nb in range(config_expe['nb_episodes']):
+            school.teach()
+            if activity_nb % 100 == 0:
+                school.save(episode_number=activity_nb, take_selfie=False)
+                bar.next()
 
-    # Train loop:
-    for activity_nb in range(nb_episodes):
-        act = teacher.sample_activity()
-        ans = student.get_response(act)
-        student.update_competence(act, ans)
-        if activity_nb % 100 == 0:
-            student.selfie(path, episode_number=activity_nb)
-            student.bookmark(episode_number=activity_nb)
-
-    # Plot everything
-    create_gif_from_images(f"{path}/competence/", f"{path}/competence/output.gif", duration=500)
-    create_gif_from_images(f"{path}/history/", f"{path}/history/output.gif", duration=500)
-    student.save_trajectories(path=f"{path}/trajectories/")
+    # Plot and save
+    school.get_csv_trajectories()
+    school.get_all_trajectories()
+    school.plot_difficulty_trajectories()
+    # school.create_school_gif()

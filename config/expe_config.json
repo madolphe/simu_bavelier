@@ -1,0 +1,7 @@
+{
+  "expe_name": "block_1_dim",
+  "student_params_path":"./config/config_base_student.json",
+  "teachers_params_path":"./config/config_teachers.json",
+  "nb_classrooms": 5,
+  "nb_episodes": 10000
+}

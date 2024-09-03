@@ -1,0 +1,6 @@
+{
+  "Staircase": {"activity_space_desc":  [6, 13, 13, 13], "initial_position": [0, 0, 0, 0]},
+  "Zpdes": {"activity_space_desc":  [6, 13, 13, 13], "config_folder_path": "config/zpdes_config", "file_name":  "ZPDES_mot"},
+  "RandomTeacher": {"activity_space_desc":  [6, 13, 13, 13]},
+  "RandomTeacher2": {"activity_space_desc":  [6, 13, 13, 13]}
+}

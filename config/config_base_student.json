@@ -1,0 +1,12 @@
+{
+  "activity_space_desc": [[6, 13, 13, 13]],
+  "nb_to_neighbour_mastery": [2,3,4,5],
+  "initial_competence_proportion":[0],
+  "unfeasible_space_proportion": [0],
+  "initial_competence_space_coordinates": [[[0,6], [0,2], [0,2], [0,2]]],
+  "flashback": [false],
+  "proba_success": [0.9],
+  "flashback_save": [500],
+  "flashback_refresh": [5000],
+  "unfeasible_space_coordinates": [[[0,7], [9,13], [0,13], [0,13]]]
+}
